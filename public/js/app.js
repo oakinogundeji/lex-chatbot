@@ -57,10 +57,12 @@ const VM = new Vue({
     const URL = this.welcomeURL;
     this.$http.get(URL)
       .then(data => {
-        this.loadingSpinner = false;
         console.log('response from backend...');
         console.log(data);
-        return this.output = data.body.data;
+        return setTimeout(() => {
+          this.loadingSpinner = false;
+          return this.output = data.body.data;
+        }, 1500);
       })
       .catch(info => {
         this.loadingSpinner = false;

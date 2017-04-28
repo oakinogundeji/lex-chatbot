@@ -13,9 +13,31 @@ const Vue = require('vue');
 Vue.use(require('vue-resource'));
 Vue.http.options.root = '/root';
 //=============================================================================
+/**
+ * helper functions
+ */
+//=============================================================================
+function generateUID() {
+  const
+    date = new Date().getTime(),
+    xterBank = 'abcdefghijklmnopqrstuvwxyz';
+  let
+    fstring = '',
+    i;
+  for(i = 0; i < 15; i++) {
+    fstring += xterBank[parseInt(Math.random()*26)];
+  }
+  return (fstring += date);
+}
+//=============================================================================
+/**
+ * VM
+ */
+//=============================================================================
 const VM = new Vue({
   el: '#app',
   data: {
+    userID: '',
     output: [],
     userInput: '',
     welcomeURL: '/welcome',
@@ -28,18 +50,15 @@ const VM = new Vue({
         this.loadingSpinner = true;
         const
           msg = this.userInput.trim(),
-          userInputData = {
-            input: msg
-          },
           URL = this.userInputURL;
         console.log(`data sent to backend... URL: ${URL}, msg: ${msg}`);
-        console.log(userInputData);
-        this.$http.post(URL, {data: userInputData})
+        this.$http.post(URL, {userInput: msg, userID: this.userID})
           .then(data => {
             this.loadingSpinner = false;
             console.log('response from backend...');
             console.log(data);
-            return this.output = data.body.data;
+            this.output = [];
+            return this.output.push(data.body.data);
           })
           .catch(info => {
             this.loadingSpinner = false;
@@ -54,6 +73,8 @@ const VM = new Vue({
   },
   mounted: function () {
     console.log('mounted fired...');
+    this.userID = generateUID();
+    console.log(`userID: ${this.userID}`);
     const URL = this.welcomeURL;
     this.$http.get(URL)
       .then(data => {

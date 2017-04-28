@@ -44,10 +44,10 @@
               </div>
               <div class="panel-body" id="chatbot-output">
                 <p v-for="sentence in output">{{sentence}}</p>
-                <div class="row" v-show="loadingSpinner" id="loading-spinner">
-                  <span><i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i></span>
-                </div>
               </div>
+            </div>
+            <div class="row" v-show="loadingSpinner" id="loading-spinner">
+              <span><i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i></span>
             </div>
             <div class="form-group">
               <label for="user-input">Your input:</label>
